@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-public class FifoBufferUtilsTest {
+public class CircularBufferUtilsTest {
 
     @Test
     public void testGetNextIdx_incrementalIdx() {
@@ -12,7 +12,7 @@ public class FifoBufferUtilsTest {
         int currIdx = 2;
         int expected = 3;
 
-        assertEquals(expected, FifoBufferUtils.getNextIdx(currIdx, length));
+        assertEquals(expected, CircularBufferUtils.getNextIdx(currIdx, length));
     }
 
     @Test
@@ -21,7 +21,7 @@ public class FifoBufferUtilsTest {
         int currIdx = 14;
         int expected = 0;
 
-        assertEquals(expected, FifoBufferUtils.getNextIdx(currIdx, length));
+        assertEquals(expected, CircularBufferUtils.getNextIdx(currIdx, length));
     }
 
 }

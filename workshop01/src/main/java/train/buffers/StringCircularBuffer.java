@@ -2,7 +2,7 @@ package train.buffers;
 
 import train.exceptions.EmptyBufferException;
 import train.exceptions.FullBufferException;
-import train.utils.FifoBufferUtils;
+import train.utils.CircularBufferUtils;
 
 /**
  * The basic {@code String} version implementation of {@link CircularBuffer}.
@@ -38,13 +38,10 @@ public class StringCircularBuffer implements CircularBuffer {
         if (isFull()) {
             throw new FullBufferException();
         }
+
         buffer[writePtr] = input;
         writePtr = nextWrite();
-        isEmpty = false;
-
-        if (isPtrOverlap()) {
-            isFull = true;
-        }
+        setWriteState();
     }
 
     @Override
@@ -55,11 +52,7 @@ public class StringCircularBuffer implements CircularBuffer {
 
         String bufferElem = buffer[readPtr];
         readPtr = nextRead();
-        isFull = false;
-
-        if (isPtrOverlap()) {
-            isEmpty = true;
-        }
+        setReadState();
 
         return bufferElem;
     }
@@ -80,15 +73,29 @@ public class StringCircularBuffer implements CircularBuffer {
     }
 
     private int nextRead() {
-        return FifoBufferUtils.getNextIdx(readPtr, buffer.length);
+        return CircularBufferUtils.getNextIdx(readPtr, buffer.length);
     }
 
     private int nextWrite() {
-        return FifoBufferUtils.getNextIdx(writePtr, buffer.length);
+        return CircularBufferUtils.getNextIdx(writePtr, buffer.length);
     }
 
     private boolean isPtrOverlap() {
         return writePtr == readPtr;
+    }
+
+    private void setReadState() {
+        isFull = false;
+        if (isPtrOverlap()){
+            isEmpty = true;
+        }
+    }
+
+    private void setWriteState() {
+        isEmpty = false;
+        if (isPtrOverlap()){
+            isFull = true;
+        }
     }
 
 }
