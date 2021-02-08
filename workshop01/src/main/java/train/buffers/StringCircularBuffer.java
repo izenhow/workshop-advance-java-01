@@ -15,6 +15,9 @@ public class StringCircularBuffer implements CircularBuffer {
     private int readPtr;
     private int writePtr;
 
+    private boolean isFull;
+    private boolean isEmpty;
+
     @Override
     public void create() {
         create(DEFAULT_BUFFER_SIZE);
@@ -26,18 +29,38 @@ public class StringCircularBuffer implements CircularBuffer {
 
         readPtr = 0;
         writePtr = 0;
+        isFull = false;
+        isEmpty = true;
     }
 
     @Override
     public void write(String input) throws FullBufferException {
+        if (isFull()) {
+            throw new FullBufferException();
+        }
         buffer[writePtr] = input;
         writePtr = nextWrite();
+        isEmpty = false;
+
+        if (isPtrOverlap()) {
+            isFull = true;
+        }
     }
 
     @Override
     public String read() throws EmptyBufferException {
+        if (isEmpty()) {
+            throw new EmptyBufferException();
+        }
+
         String bufferElem = buffer[readPtr];
         readPtr = nextRead();
+        isFull = false;
+
+        if (isPtrOverlap()) {
+            isEmpty = true;
+        }
+
         return bufferElem;
     }
 
@@ -48,12 +71,12 @@ public class StringCircularBuffer implements CircularBuffer {
 
     @Override
     public boolean isEmpty() {
-        return readPtr == writePtr;
+        return isEmpty;
     }
 
     @Override
     public boolean isFull() {
-        return nextWrite() == readPtr;
+        return isFull;
     }
 
     private int nextRead() {
@@ -62,6 +85,10 @@ public class StringCircularBuffer implements CircularBuffer {
 
     private int nextWrite() {
         return FifoBufferUtils.getNextIdx(writePtr, buffer.length);
+    }
+
+    private boolean isPtrOverlap() {
+        return writePtr == readPtr;
     }
 
 }

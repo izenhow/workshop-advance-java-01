@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -63,7 +64,7 @@ public class StringCircularBufferTest {
 
     @Test
     public void testIsFull_nonFull() {
-        prepareTestBuffer(USE_DEFAULT);
+        prepareTestBuffer(1);
         assertFalse(buffer.isFull());
     }
 
@@ -89,6 +90,57 @@ public class StringCircularBufferTest {
         assertEquals(inputA, buffer.read());
         assertEquals(inputB, buffer.read());
         assertEquals(inputC, buffer.read());
+    }
+
+    @Test
+    public void testWrite_toFull() throws FullBufferException {
+        prepareTestBuffer(2);
+        assertFalse(buffer.isFull());
+        buffer.write("A");
+        buffer.write("B");
+        assertTrue(buffer.isFull());
+    }
+
+    @Test
+    public void testReadWrite_toEmpty() throws FullBufferException, EmptyBufferException {
+        prepareTestBuffer(2);
+        buffer.write("A");
+        buffer.write("B");
+        assertFalse(buffer.isEmpty());
+
+        buffer.read();
+        buffer.read();
+        assertTrue(buffer.isEmpty());
+    }
+
+    @Test
+    public void testWrite_fullBufferException_fail() {
+        prepareTestBuffer(2);
+        Assertions.assertThrows(FullBufferException.class, () -> {
+            buffer.write("A");
+            buffer.write("B");
+            buffer.write("C");
+        });
+    }
+
+    @Test
+    public void testRead_emptyBufferException_fail() {
+        prepareTestBuffer(USE_DEFAULT);
+        Assertions.assertThrows(EmptyBufferException.class, () -> {
+            buffer.read();
+        });
+    }
+
+    @Test
+    public void testReadWrite_emptyBufferException_fail() {
+        prepareTestBuffer(USE_DEFAULT);
+        Assertions.assertThrows(EmptyBufferException.class, () -> {
+            buffer.write("A");
+            buffer.write("B");
+            buffer.read();
+            buffer.read();
+            buffer.read();
+        });
     }
 
     private void prepareTestBuffer(int size) {
