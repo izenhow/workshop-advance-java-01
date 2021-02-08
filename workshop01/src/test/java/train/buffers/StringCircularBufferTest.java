@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import train.exceptions.EmptyBufferException;
@@ -14,49 +16,61 @@ public class StringCircularBufferTest {
     private static int DEFAULT_BUFFER_SIZE = 10;
     private static int USE_DEFAULT = -1;
 
+    private CircularBuffer buffer;
+
+    @BeforeEach
+    public void setup() {
+        buffer = new StringCircularBuffer();
+    }
+
+    @AfterEach
+    public void teardown() {
+        buffer = null;
+    }
+
     @Test
     public void testCreate_default() {
-        CircularBuffer buffer = prepareTestBuffer(USE_DEFAULT);
+        prepareTestBuffer(USE_DEFAULT);
         assertEquals(buffer.getSize(), DEFAULT_BUFFER_SIZE);
     }
 
     @Test
     public void testCreate_sized() {
         int size = 5;
-        CircularBuffer buffer = prepareTestBuffer(size);
+        prepareTestBuffer(size);
         assertEquals(buffer.getSize(), size);
     }
 
     @Test
     public void testIsEmpty_empty() {
-        CircularBuffer buffer = prepareTestBuffer(USE_DEFAULT);
+        prepareTestBuffer(USE_DEFAULT);
         assertTrue(buffer.isEmpty());
     }
 
     @Test
     public void testIsEmpty_nonEmpty() throws FullBufferException {
-        CircularBuffer buffer = prepareTestBuffer(USE_DEFAULT);
+        prepareTestBuffer(USE_DEFAULT);
         buffer.write("A");
         assertFalse(buffer.isEmpty());
     }
 
     @Test
     public void testIsFull_full() throws FullBufferException {
-        CircularBuffer buffer = prepareTestBuffer(1);
+        prepareTestBuffer(1);
         buffer.write("A");
         assertTrue(buffer.isFull());
     }
 
     @Test
     public void testIsFull_nonFull() {
-        CircularBuffer buffer = prepareTestBuffer(USE_DEFAULT);
+        prepareTestBuffer(USE_DEFAULT);
         assertFalse(buffer.isFull());
     }
 
     @Test
     public void testReadWrite_anInput_pass() throws FullBufferException, EmptyBufferException {
         String inputA = "A";
-        CircularBuffer buffer = prepareTestBuffer(USE_DEFAULT);
+        prepareTestBuffer(USE_DEFAULT);
         buffer.write(inputA);
         assertEquals(inputA, buffer.read());
     }
@@ -67,7 +81,7 @@ public class StringCircularBufferTest {
         String inputB = "B";
         String inputC = "C";
 
-        CircularBuffer buffer = prepareTestBuffer(USE_DEFAULT);
+        prepareTestBuffer(USE_DEFAULT);
         buffer.write(inputA);
         buffer.write(inputB);
         buffer.write(inputC);
@@ -77,13 +91,11 @@ public class StringCircularBufferTest {
         assertEquals(inputC, buffer.read());
     }
 
-    private CircularBuffer prepareTestBuffer(int size) {
-        CircularBuffer buffer = new StringCircularBuffer();
+    private void prepareTestBuffer(int size) {
+        buffer = new StringCircularBuffer();
 
         int argSize = size == USE_DEFAULT ? DEFAULT_BUFFER_SIZE : size;
         buffer.create(argSize);
-
-        return buffer;
     }
 
 }
