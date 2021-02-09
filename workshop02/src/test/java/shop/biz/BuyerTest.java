@@ -1,8 +1,12 @@
-package shop;
+package shop.biz;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import shop.models.Basket;
+import shop.models.Book;
+import shop.models.BookBuilder;
 
 public class BuyerTest {
 
