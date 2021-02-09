@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Basket {
-    List<Book> books = new ArrayList<>();
+    private List<Book> books = new ArrayList<>();
     private int netPrice;
     private int discountPrice;
 
@@ -12,8 +12,17 @@ public class Basket {
         books.add(book);
     }
 
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public int getBookQty() {
+        return books.size();
+    }
+
+    // left-shift to avoid dealing with decimal number
     public int getNetPrice() {
-        return netPrice;
+        return netPrice * 100;
     }
 
     public void setNetPrice(int netPrice) {
