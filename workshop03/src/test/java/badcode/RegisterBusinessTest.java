@@ -124,12 +124,7 @@ public class RegisterBusinessTest {
         newSpeaker.setEmail("demo@gmail.com");
 
         // Stub dependency
-        SpeakerRepository stub = new SpeakerRepository() {
-            @Override
-            public Integer saveSpeaker(Speaker speaker) {
-                return new Integer(100);
-            }
-        };
+        SpeakerRepository stub = prepareStub();
 
         // Act
         Integer speakerId = registerBusiness.register(stub, newSpeaker);
@@ -137,6 +132,17 @@ public class RegisterBusinessTest {
         // Assert
         assertNotNull(speakerId);
         assertEquals(100, speakerId);
+    }
+
+    private SpeakerRepository prepareStub() {
+        int mockId = 100;
+        // Stub dependency
+        return new SpeakerRepository() {
+            @Override
+            public Integer saveSpeaker(Speaker speaker) {
+                return mockId;
+            }
+        };
     }
 
 }
