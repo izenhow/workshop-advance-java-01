@@ -8,13 +8,11 @@ public class RegisterBusiness {
 
     public Integer register(SpeakerRepository repository, Speaker speaker) {
         Integer speakerId;
-        String[] domains = {"gmail.com", "live.com"};
 
         if (speaker.getFirstName() != null && !speaker.getFirstName().trim().equals("")) {
             if (speaker.getLastName() != null && !speaker.getLastName().trim().equals("")) {
                 if (speaker.getEmail() != null && !speaker.getEmail().trim().equals("")) {
-                    String emailDomain = speaker.getEmail().split("@")[1];
-                    if (Arrays.stream(domains).filter(it -> it.equals(emailDomain)).count() == 1) {
+                    if (validateEmailDomain(speaker.getEmail())) {
                         int exp = speaker.getExp();
                         if (exp <= 1) {
                             speaker.setRegistrationFee(500);
@@ -46,6 +44,19 @@ public class RegisterBusiness {
         }
 
         return speakerId;
+    }
+
+    private boolean validateEmailDomain(String email) {
+        String[] acceptableDomains = {"gmail.com", "live.com"};
+        String[] emailParts = email.split("@");
+
+        // Input doesn't contain @, invalid email format.
+        if (emailParts.length < 2) {
+            return false;
+        }
+
+        String emailDomain = emailParts[1];
+        return Arrays.stream(acceptableDomains).filter(it -> it.equals(emailDomain)).count() > 0;
     }
 
 }

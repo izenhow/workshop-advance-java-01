@@ -77,6 +77,24 @@ public class RegisterBusinessTest {
     }
 
     @Test
+    public void register_with_incomplete_email_should_throw_SpeakerDoesntMeetRequirementsException() {
+        // Arrange
+        RegisterBusiness registerBusiness = new RegisterBusiness();
+        Speaker newSpeaker = new Speaker();
+        newSpeaker.setFirstName("Demo");
+        newSpeaker.setLastName("Demo last");
+        newSpeaker.setEmail("testmail");
+
+        // Act
+        Exception exception = assertThrows(SpeakerDoesntMeetRequirementsException.class, () -> {
+            registerBusiness.register(null, newSpeaker);
+        });
+
+        // Assert
+        assertEquals("Speaker doesn't meet our standard rules.", exception.getMessage());
+    }
+
+    @Test
     public void can_not_save_speaker_throw_SaveSpeakerException() {
         // Arrange
         RegisterBusiness registerBusiness = new RegisterBusiness();
