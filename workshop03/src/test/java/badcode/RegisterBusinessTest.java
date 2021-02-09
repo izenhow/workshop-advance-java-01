@@ -134,6 +134,116 @@ public class RegisterBusinessTest {
         assertEquals(100, speakerId);
     }
 
+    @Test
+    public void register_exp_lq_a_year() {
+        // Arrange
+        RegisterBusiness registerBusiness = new RegisterBusiness();
+        Speaker newSpeaker = new Speaker();
+        newSpeaker.setFirstName("Demo");
+        newSpeaker.setLastName("Demo last");
+        newSpeaker.setEmail("demo@gmail.com");
+        newSpeaker.setExp(1);
+
+        // Stub dependency
+        SpeakerRepository stub = prepareStub();
+
+        // Act
+        registerBusiness.register(stub, newSpeaker);
+
+        int expectedFee = 500;
+
+        // Assert
+        assertEquals(expectedFee, newSpeaker.getRegistrationFee());
+    }
+
+    @Test
+    public void register_exp_2_3_years() {
+        // Arrange
+        RegisterBusiness registerBusiness = new RegisterBusiness();
+        Speaker newSpeaker = new Speaker();
+        newSpeaker.setFirstName("Demo");
+        newSpeaker.setLastName("Demo last");
+        newSpeaker.setEmail("demo@gmail.com");
+        newSpeaker.setExp(3);
+
+        // Stub dependency
+        SpeakerRepository stub = prepareStub();
+
+        // Act
+        registerBusiness.register(stub, newSpeaker);
+
+        int expectedFee = 250;
+
+        // Assert
+        assertEquals(expectedFee, newSpeaker.getRegistrationFee());
+    }
+
+    @Test
+    public void register_exp_4_5_years() {
+        // Arrange
+        RegisterBusiness registerBusiness = new RegisterBusiness();
+        Speaker newSpeaker = new Speaker();
+        newSpeaker.setFirstName("Demo");
+        newSpeaker.setLastName("Demo last");
+        newSpeaker.setEmail("demo@gmail.com");
+        newSpeaker.setExp(4);
+
+        // Stub dependency
+        SpeakerRepository stub = prepareStub();
+
+        // Act
+        registerBusiness.register(stub, newSpeaker);
+
+        int expectedFee = 100;
+
+        // Assert
+        assertEquals(expectedFee, newSpeaker.getRegistrationFee());
+    }
+
+    @Test
+    public void register_exp_6_9_years() {
+        // Arrange
+        RegisterBusiness registerBusiness = new RegisterBusiness();
+        Speaker newSpeaker = new Speaker();
+        newSpeaker.setFirstName("Demo");
+        newSpeaker.setLastName("Demo last");
+        newSpeaker.setEmail("demo@gmail.com");
+        newSpeaker.setExp(9);
+
+        // Stub dependency
+        SpeakerRepository stub = prepareStub();
+
+        // Act
+        registerBusiness.register(stub, newSpeaker);
+
+        int expectedFee = 50;
+
+        // Assert
+        assertEquals(expectedFee, newSpeaker.getRegistrationFee());
+    }
+
+    @Test
+    public void register_exp_gt_9_years() {
+        // Arrange
+        RegisterBusiness registerBusiness = new RegisterBusiness();
+        Speaker newSpeaker = new Speaker();
+        newSpeaker.setFirstName("Demo");
+        newSpeaker.setLastName("Demo last");
+        newSpeaker.setEmail("demo@gmail.com");
+        newSpeaker.setExp(10);
+
+        // Stub dependency
+        SpeakerRepository stub = prepareStub();
+
+        // Act
+        registerBusiness.register(stub, newSpeaker);
+
+        int expectedFee = 0;
+
+        // Assert
+        assertEquals(expectedFee, newSpeaker.getRegistrationFee());
+    }
+
     private SpeakerRepository prepareStub() {
         int mockId = 100;
         // Stub dependency
