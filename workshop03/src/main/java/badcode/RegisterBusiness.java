@@ -11,7 +11,7 @@ public class RegisterBusiness {
         SpeakerValidationResult validationResult = validateSpeaker(speaker);
         if (validationResult.isPass()) {
             if (validateEmailDomain(speaker.getEmail())) {
-                calculateFee(speaker);
+                FeeCalculator.calculateFee(speaker);
                 try {
                     speakerId = repository.saveSpeaker(speaker);
                 }catch (Exception exception) {
@@ -25,21 +25,6 @@ public class RegisterBusiness {
         }
 
         return speakerId;
-    }
-
-    private void calculateFee(Speaker speaker) {
-        int exp = speaker.getExp();
-        int fee = 0;
-        if (exp <= 1) {
-            fee = 500;
-        } else if (exp <= 3) {
-            fee = 250;
-        } else if (exp <= 5) {
-            fee = 100;
-        } else if (exp <= 9) {
-            fee = 50;
-        }
-        speaker.setRegistrationFee(fee);
     }
 
     private boolean validateEmailDomain(String email) {
