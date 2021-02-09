@@ -7,7 +7,7 @@ public class DiscountCalculator {
     private static int BOOK_QTY_GET_10_PERCENT_DISCOUNT = 3;
 
     public static int get(Basket basket) {
-        int bookQty = basket.getBookQty();
+        int bookQty = basket.getBookListSize();
 
         double netPrice = basket.getNetPrice();
         int percentage = getDiscountPercentage(bookQty);
