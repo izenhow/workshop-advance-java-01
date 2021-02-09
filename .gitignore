@@ -1,1 +1,7 @@
-/.idea
+# vscode
+
+.vscode
+.project
+.settings
+.classpath
+**/target/*
