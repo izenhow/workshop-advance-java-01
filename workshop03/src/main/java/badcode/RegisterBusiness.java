@@ -1,8 +1,5 @@
 package badcode;
 
-
-import java.util.Arrays;
-
 public class RegisterBusiness {
 
     public Integer register(SpeakerRepository repository, Speaker speaker) {
@@ -10,7 +7,7 @@ public class RegisterBusiness {
 
         SpeakerValidationResult validationResult = SpeakerValidator.validateSpeaker(speaker);
         if (validationResult.isPass()) {
-            if (validateEmailDomain(speaker.getEmail())) {
+            if (EmailValidator.validateEmailDomain(speaker.getEmail())) {
                 FeeCalculator.calculateFee(speaker);
                 try {
                     speakerId = repository.saveSpeaker(speaker);
@@ -25,19 +22,6 @@ public class RegisterBusiness {
         }
 
         return speakerId;
-    }
-
-    private boolean validateEmailDomain(String email) {
-        String[] acceptableDomains = {"gmail.com", "live.com"};
-        String[] emailParts = email.split("@");
-
-        // Input doesn't contain @, invalid email format.
-        if (emailParts.length < 2) {
-            return false;
-        }
-
-        String emailDomain = emailParts[1];
-        return Arrays.stream(acceptableDomains).filter(it -> it.equals(emailDomain)).count() > 0;
     }
 
 }
